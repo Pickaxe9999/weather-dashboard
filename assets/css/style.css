@@ -1,0 +1,12 @@
+button{
+    margin-top: 10px;
+}
+
+#search-cities{
+    padding-bottom: 10px;
+    border-bottom: 2px solid black;
+}
+
+#search-container{
+    margin-left: 10px;
+}
