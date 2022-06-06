@@ -10,3 +10,23 @@ button{
 #search-container{
     margin-left: 10px;
 }
+
+.low-index{
+    background-color: lightgreen;
+}
+
+.medium-index{
+    background-color: yellow;
+}
+
+.high-index{
+    background-color: orange;
+}
+
+.very-high-index{
+    background-color: red;
+}
+
+.extreme-index{
+    background-color: purple;
+}

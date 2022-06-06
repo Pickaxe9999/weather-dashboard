@@ -30,6 +30,8 @@ var getCity = function(cityName){
 //prints to the current-day box the searched city
 var getCityCurrentDay = function(cityName, cityObj){
 
+    console.log(cityObj);
+
     //Print the current City
     var cityNameEl = document.getElementById("city-current-day");
     cityNameEl.textContent = cityName;
@@ -45,6 +47,11 @@ var getCityCurrentDay = function(cityName, cityObj){
     //print the humidity of the current city
     var humidityEl = document.getElementById("humidity");
     humidityEl.textContent = "Humidity: " + cityObj.current.humidity + "%";
+
+    //print the humidity of the current city
+    var uvIndexEl = document.getElementById("uv-index");
+    getUVIndex(cityObj.current.uvi);
+    uvIndexEl.textContent = cityObj.current.uvi;
 }
 
 //openWeather returns all temps in Kelvin so this converts to fahrenheit
@@ -93,6 +100,22 @@ var printSearchHistory = function(){
     }
 }
 
+//create a span tag  with the UV index
+var getUVIndex = function(uvIndex){
+    var uvIndexEl = document.getElementById("uv-index");
+    if(uvIndex > 0 && uvIndex <= 2){
+        uvIndexEl.className = "low-index"
+    }else if(uvIndex > 2 && uvIndex <= 5){
+        uvIndexEl.className = "medium-index"
+    }else if(uvIndex > 2 && uvIndex <= 5){
+        uvIndexEl.className = "high-index"
+    }else if(uvIndex > 2 && uvIndex <= 5){
+        uvIndexEl.className = "very-high-index"
+    }else if(uvIndex >= 11){
+        uvIndexEl.className = "extreme-index"
+    }
+}
+
 //check to see if the user has clicked the search button
 var btnHandler = function(event){
     var userTarget = event.target;
@@ -103,11 +126,10 @@ var btnHandler = function(event){
         //request that cities info again
         getCity(userTarget.textContent);
 
-
         //temp arr for sotring everything but the selected array
         var temp = [];
 
-        // //remove button from search history array
+        //remove button from search history array
         for(var i = 0; i < searchHistoryNames.length; i++){
             if(searchHistoryNames[i].getAttribute("data-name") != userTarget.textContent){
                 //if it does not match add to temp array
@@ -115,8 +137,8 @@ var btnHandler = function(event){
             }
         }
 
+        //reprint the buttons with the selected button at the most recent history
         searchHistoryNames = temp;
-        console.log(searchHistoryNames);
         printSearchHistory();
     }
 }
