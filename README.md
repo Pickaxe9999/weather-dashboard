@@ -16,6 +16,8 @@ THEN I am presented with a 5-day forecast that displays the date, an icon repres
 WHEN I click on a city in the search history
 THEN I am again presented with current and future conditions for that city
 
+
+
 Branch Breakdown
 -feature/city-information
 The user can search up the name of a city to retrieve data on its current weather conditions

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Bootstrap api call-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+    />
+    <title>Weather Dashboard</title>
+</head>
+<body>
+    <!--holding container for the weather dashboard-->
+    <div class="row" id="weather-dashboard">
+
+        <!--search container-->
+        <div class="col" id="search-container">
+
+            <div id="search-cities">
+                <h1>Search for a city</h1>
+                <input type="text" class="w-100" id="search-text">
+                <button type="submit" class="w-100" id="search">Search</button>
+            </div>
+
+            <div id="search-history">
+                <ul id="search-history-list">
+                    
+                </ul>
+            </div>
+        </div>
+
+        <!--City Dashboard-->
+        <div class="col-8 border" id="city-dashboard">
+
+            <div class="row border" id="current-day">
+                <h1 id="city-current-day"></h1>
+                <p id="temp">Temp: </p>
+                <p id="wind">Wind: </p>
+                <p id="humidity">Humidity: </p>
+            </div>
+
+            <div class="row border" id="five-day-forecast">
+                <p>five-day-forecast</p>
+            </div>
+            
+        </div>
+
+    </div>
+
+
+    <!--script.js call-->
+    <script src="./assets/js/script.js"></script>
+</body>
+</html>
