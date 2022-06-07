@@ -1,5 +1,6 @@
 var weatherDashBoard = document.querySelector("#weather-dashboard");
 var searchEl = document.querySelector("#search-text");
+var fiveDaysConsoleEl = document.querySelector("#five-day-forecast");
 var cityName = "";
 var searchHistoryNames = [];
 var searchHistoryLimit = 5;
@@ -14,13 +15,14 @@ var getCity = function(cityName){
           var cityLat = data[0].lat;
           var cityLong = data[0].lon;
           
-          var locationInfo = "https://api.openweathermap.org/data/2.5/onecall?lat=" + cityLat + "&lon=" + cityLong + "&exclude=hourly,daily&appid=862fa80dbf9297962c039ac6e9c8e055"
+          var locationInfo = "https://api.openweathermap.org/data/2.5/onecall?lat=" + cityLat + "&lon=" + cityLong + "&exclude=minutely,hourly&appid=862fa80dbf9297962c039ac6e9c8e055"
           fetch(locationInfo).then(function(response){
               response.json().then(function(data){
                   searchEl.value = "";
                   var cityObj = data;
                   addToSearchHistory(cityName);
                   getCityCurrentDay(cityName, cityObj);
+                  fiveDayForecast(cityObj.daily);
               })
           })
         });
@@ -32,9 +34,11 @@ var getCityCurrentDay = function(cityName, cityObj){
 
     console.log(cityObj);
 
-    //Print the current City
+    //Print the current City and todays date
+    var date = new Date(cityObj.daily[0].dt*1000);
+    date = date.toLocaleString().split(",", 1);
     var cityNameEl = document.getElementById("city-current-day");
-    cityNameEl.textContent = cityName;
+    cityNameEl.textContent = cityName + " - " + date;
 
     //print the temp of the current city
     var tempEl = document.getElementById("temp");
@@ -52,6 +56,57 @@ var getCityCurrentDay = function(cityName, cityObj){
     var uvIndexEl = document.getElementById("uv-index");
     getUVIndex(cityObj.current.uvi);
     uvIndexEl.textContent = cityObj.current.uvi;
+}
+
+//prints the five day forcast
+var fiveDayForecast = function(cityObj){
+    //remove the previous cities five days
+    if(fiveDaysConsoleEl.lastChild){
+        while(fiveDaysConsoleEl.lastChild){
+            fiveDaysConsoleEl.removeChild(fiveDaysConsoleEl.lastChild);
+        }
+    }
+
+    //print the current cities five day forecast
+    for(var i =1; i < 6; i++){
+        singleForcast(cityObj[i]);
+    }
+}
+
+//print a single days forecast
+var singleForcast = function(cityDailyObj){
+    //create a card that holds a single days information
+    var dailyForecastEl = document.createElement("div");
+    dailyForecastEl.className = "col";
+    dailyForecastEl.setAttribute("id", "daily-forecast");
+
+    //create the date, weather, temp, wind, and humidity tags
+    var dateEl = document.createElement("p");
+    var date = new Date(cityDailyObj.dt*1000);
+    dateEl.textContent = date.toLocaleString().split(",", 1);
+    dailyForecastEl.appendChild(dateEl);
+    
+    //weather icon
+    var iconEl = document.createElement("img");
+    iconEl.setAttribute("src", " http://openweathermap.org/img/wn/" + cityDailyObj.weather[0].icon + "@2x.png");
+    dailyForecastEl.appendChild(iconEl);
+
+    //temp
+    var tempEl = document.createElement("p");
+    tempEl.textContent = "Temp: " + kelvinToFahrenheit(cityDailyObj.temp.day) + " \u00B0F";
+    dailyForecastEl.appendChild(tempEl);
+
+    //wind
+    var windEl = document.createElement("p");
+    windEl.textContent = "Wind: " + cityDailyObj.wind_speed + "MPH";
+    dailyForecastEl.appendChild(windEl);
+
+    //humidity
+    var humidityEl = document.createElement("p");
+    humidityEl.textContent = "Humidity: " + cityDailyObj.humidity + "%";
+    dailyForecastEl.appendChild(humidityEl);
+
+    fiveDaysConsoleEl.appendChild(dailyForecastEl);
 }
 
 //openWeather returns all temps in Kelvin so this converts to fahrenheit
@@ -104,15 +159,15 @@ var printSearchHistory = function(){
 var getUVIndex = function(uvIndex){
     var uvIndexEl = document.getElementById("uv-index");
     if(uvIndex > 0 && uvIndex <= 2){
-        uvIndexEl.className = "low-index"
+        uvIndexEl.className = "low-index";
     }else if(uvIndex > 2 && uvIndex <= 5){
-        uvIndexEl.className = "medium-index"
+        uvIndexEl.className = "medium-index";
     }else if(uvIndex > 2 && uvIndex <= 5){
-        uvIndexEl.className = "high-index"
+        uvIndexEl.className = "high-index";
     }else if(uvIndex > 2 && uvIndex <= 5){
-        uvIndexEl.className = "very-high-index"
+        uvIndexEl.className = "very-high-index";
     }else if(uvIndex >= 11){
-        uvIndexEl.className = "extreme-index"
+        uvIndexEl.className = "extreme-index";
     }
 }
 

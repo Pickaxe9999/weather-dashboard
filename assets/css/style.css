@@ -30,3 +30,7 @@ button{
 .extreme-index{
     background-color: purple;
 }
+
+#daily-forecast{
+    margin: 10px;
+}
