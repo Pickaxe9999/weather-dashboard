@@ -33,3 +33,10 @@ when the user seaches for a city the five-day forecast is displayed with the fol
 
 -feature/search-history-storage
 When the user clicks on a city from the history tab then that information is retrieved from local storage if the current day has not changed, if the day has changed then it recalls the api to get an updated forecast
+
+![weather-dashboard](https://user-images.githubusercontent.com/103781767/173268929-21a55445-6f23-407a-9de4-22df2392fa46.png)
+
+Last Updated by - Jacob_Hannah(jacob.hannah164@gmail.com) 
+Last Updated - 6/12/2022 
+Website link - https://pickaxe9999.github.io/weather-dashboard/ 
+GitHub - https://github.com/Pickaxe9999/weather-dashboard
