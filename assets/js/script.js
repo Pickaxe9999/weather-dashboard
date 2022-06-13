@@ -2,7 +2,7 @@ var weatherDashBoard = document.querySelector("#weather-dashboard");
 var searchEl = document.querySelector("#search-text");
 var fiveDaysConsoleEl = document.querySelector("#five-day-forecast");
 var cityName = "";
-var searchHistoryNames = [];
+var cityHistoryBtns = [];
 var searchHistoryLimit = 5;
 
 //get a city the user searches
@@ -12,12 +12,15 @@ var getCity = function(cityName){
 
     fetch(LocationSearch).then(function(response) {
         response.json().then(function(data) {
+          console.log(data);
           var cityLat = data[0].lat;
           var cityLong = data[0].lon;
           
           var locationInfo = "https://api.openweathermap.org/data/2.5/onecall?lat=" + cityLat + "&lon=" + cityLong + "&exclude=minutely,hourly&appid=862fa80dbf9297962c039ac6e9c8e055"
           fetch(locationInfo).then(function(response){
               response.json().then(function(data){
+                  console.log("loading weather");
+                  console.log(data);
                   searchEl.value = "";
                   var cityObj = data;
                   addToSearchHistory(cityName);
@@ -31,8 +34,6 @@ var getCity = function(cityName){
 
 //prints to the current-day box the searched city
 var getCityCurrentDay = function(cityName, cityObj){
-
-    console.log(cityObj);
 
     //Print the current City and todays date
     var date = new Date(cityObj.daily[0].dt*1000);
@@ -126,16 +127,17 @@ var addToSearchHistory = function(cityName){
     newCity.setAttribute("data-name", cityName);
     newCity.textContent = cityName;
 
-    if(searchHistoryNames.length < searchHistoryLimit){
+    if(cityHistoryBtns.length < searchHistoryLimit){
         //add to the begining of the array
-        searchHistoryNames.unshift(newCity);
+        cityHistoryBtns.unshift(newCity);
     }else{
         //add to the begining of the array
-        searchHistoryNames.unshift(newCity);
+        cityHistoryBtns.unshift(newCity);
 
         //remove the last result of the array
-        searchHistoryNames.pop();
+        cityHistoryBtns.pop();
     }
+    saveSearchHistory(cityHistoryBtns);
     printSearchHistory();
 }
 
@@ -150,8 +152,8 @@ var printSearchHistory = function(){
     }
 
     //reprint the search history list
-    for(var i = 0; i < searchHistoryNames.length; i++){
-        listEl.appendChild(searchHistoryNames[i]);
+    for(var i = 0; i < cityHistoryBtns.length; i++){
+        listEl.appendChild(cityHistoryBtns[i]);
     }
 }
 
@@ -185,18 +187,51 @@ var btnHandler = function(event){
         var temp = [];
 
         //remove button from search history array
-        for(var i = 0; i < searchHistoryNames.length; i++){
-            if(searchHistoryNames[i].getAttribute("data-name") != userTarget.textContent){
+        for(var i = 0; i < cityHistoryBtns.length; i++){
+            if(cityHistoryBtns[i].getAttribute("data-name") != userTarget.textContent){
                 //if it does not match add to temp array
-                temp.push(searchHistoryNames[i]);
+                temp.push(cityHistoryBtns[i]);
             }
         }
 
         //reprint the buttons with the selected button at the most recent history
-        searchHistoryNames = temp;
+        cityHistoryBtns = temp;
         printSearchHistory();
+    }else if(userTarget.matches("#delete-search-history")){
+        deleteSearchHistory();
     }
 }
 
+var saveSearchHistory = function(cityHistoryBtns){
+    var saveBtnValue = [];
+    for(var i = 0; i < cityHistoryBtns.length; i++){
+        saveBtnValue[i] = cityHistoryBtns[i].textContent;
+    }
+    localStorage.setItem("saveBtnValue", JSON.stringify(saveBtnValue));
+}
 
+var loadSearchHistory = function(){
+    var saveBtnValue = JSON.parse(localStorage.getItem("saveBtnValue"));
+    if(!saveBtnValue){
+        return;
+    }
+
+    //create the array of btns without it unshifting inserting in a different order like in add to search History
+    for(var i = 0; i < saveBtnValue.length; i++){
+        var newCity = document.createElement("button");
+        newCity.type = "submit";
+        newCity.className = "w-100";
+        newCity.setAttribute("id", "history");
+        newCity.setAttribute("data-name", saveBtnValue[i]);
+        newCity.textContent = saveBtnValue[i];
+        cityHistoryBtns.push(newCity);
+    }
+    printSearchHistory();
+}
+
+var deleteSearchHistory = function(){
+    localStorage.clear();
+}
+
+loadSearchHistory();
 weatherDashBoard.addEventListener("click", btnHandler);

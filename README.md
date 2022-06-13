@@ -31,5 +31,7 @@ when the user searches for a city the UV index is also retrived and displayed wi
 -feature/five-day-forecast
 when the user seaches for a city the five-day forecast is displayed with the following five days forecast
 
--feature/search-history-storage
+-feature/persistant-search-history
 When the user clicks on a city from the history tab then that information is retrieved from local storage if the current day has not changed, if the day has changed then it recalls the api to get an updated forecast
+
+need to save array of strings not buttons. please rewrite the print function to save to a string then add that city name to a button instead of saving the button after the text has been inserted
