@@ -7,7 +7,7 @@ var searchHistoryLimit = 5;
 
 //get a city the user searches
 var getCity = function(cityName){
-    var LocationSearch = "http://api.openweathermap.org/geo/1.0/direct?q=" + cityName + ",840&limit=1&appid=862fa80dbf9297962c039ac6e9c8e055"
+    var LocationSearch = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityName + ",840&limit=1&appid=862fa80dbf9297962c039ac6e9c8e055"
     searchEl.value = "Loading...";
 
     fetch(LocationSearch).then(function(response) {
